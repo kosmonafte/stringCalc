@@ -1,2 +1,3 @@
 ﻿  countCalc.cpp
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(117,24): warning C4101: rightNumber: неиспользованная локальная переменная
   countCalc.vcxproj -> C:\Users\L1nk\source\repos\countCalc\x64\Debug\countCalc.exe
