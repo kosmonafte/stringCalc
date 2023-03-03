@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <math.h>
+#include <stdlib.h>
+
 using namespace std;
 int countCalc(char* str);
 int parseCalc(char* str);
-int plusMinusCalc(char* str);
+char& normalize(char* str);
 double plusMinusCalcV2(char* str);
 int main()
 {
@@ -18,16 +20,16 @@ int main()
     }
     nStroka[strlen(stroka)] = '\0';
     delete[]stroka;
-    cout << nStroka << endl;
-    //cout << countCalc(nStroka) << endl;
-    //plusMinusCalc(nStroka);
-    
-    cout << endl << plusMinusCalcV2(nStroka);
 
-    
+
+
+    //cout << plusMinusCalcV2(nStroka);
+
+    parseCalc(nStroka);
+
 }
 
-double plusMinusCalcV2(char* str) {
+char& normalize(char* str) {
     //
     // создаем указатель с нулевым значением, далее приводим строку к универсальному
     // формату и записываем ее в созданый указатель, т.е. расставляем знаки арифметики,
@@ -67,26 +69,28 @@ double plusMinusCalcV2(char* str) {
             }
         }
     }
-    //
+    return *nStr;
+}
+
+double plusMinusCalcV2(char* str) {
+    char* nStr = &normalize(str);
     // Считаем сколько у нас знаков, а значит и элементов
-    // 
     int signCount = 0;
     for (int i = 0; i < strlen(nStr); i++) {
         if (nStr[i] == '+' || nStr[i] == '-') {
             signCount++;
         }
     }
-    cout << nStr << endl << signCount << endl;
-    //
+    //cout << nStr << endl << signCount << endl;
     // Проходим по строке и парсим данные уже в числовой массив
-    //
     double* strToNumber = new double[signCount];
     int k = 0;
+    char* number = nullptr;
     for (int i = 0; i < strlen(nStr) ; i++) {
         if (nStr[i] == '+' || nStr[i] == '-') {
             for (int j = i + 1; j < strlen(nStr); j++) {
                 if (nStr[j] == '+' || nStr[j] == '-' || nStr[j] == '=') {
-                    char* number = new char[j - i + 1];
+                    number = new char[j - i + 1];
                     int m = 0;
                     for (int l = i; l < j; l++) {
                         number[m++] = nStr[l];
@@ -99,62 +103,112 @@ double plusMinusCalcV2(char* str) {
             }
         }
     }
-    //
     // Считаем сумму числового массива
-    //
     double summ = 0;
     for (int i = 0; i < k; i++) {
-        cout << strToNumber[i] << " ";
         summ += strToNumber[i];
     }
-
+    delete[]nStr;
+    delete[]number;
+    delete[]strToNumber;
     return summ;
 }
 
-int plusMinusCalc(char* str) {
-
-
-    double leftNumber, rightNumber;                          //переменые под 2 числа
-    for (int i = 0; i < strlen(str); i++) {                  //идум по строке слева на право ищем знаки арифметики
-        if (str[i] == '+' || str[i] == '-') {                //если встречаем + или -
-            if (str[i] == '+') {                             //если это плюс
-                for (int j = i - 1; j > 0; j--) {            //идем в обратную сторону и ищем предыдущий плюс и минус
-                    if (str[j] == '+' || str[j] == '-') {    //если вустречаем знак то парсим число
-                        char* number = new char[i - j];      //создаем новый масив чаров
-                        int k = 0;                           
-                        for (int l = j + 1; k < i; l++) {    //переписываем часть строки в новый массив
-                            number[k++] = str[l];            // 
-                        }
-                        number[i - j - 1] = '\0';
-                        leftNumber = atof(number);           //переводим строку в число
-                        cout << leftNumber;
-                        break;
-                    }
-                }
-            }
-            else {
-                //natknulis na minus
-
-            }
-        }
-    }
-    return 0;
-}
-
 int parseCalc(char* str) {
+    char* nStr = &normalize(str);
+    for (int i = 0; i < strlen(nStr); i++) {
+        cout << nStr[i];
+    }
+    cout << endl;
     int k = 0;
-    for (int i = 0; i < strlen(str); i++) {
-        if (str[i] == '*' || str[i] == '/') {
+    for (int i = 0; i < strlen(nStr); i++) {
+        if (nStr[i] == '*' || nStr[i] == '/') {
             k++;
         }
     }
-    for (int i = 0; i < k; i++) { 
-    }
-    for (int i = 0; i < strlen(str); i++) {
-        if (str[i] == '*') {
+    cout << k << endl;
+    char larr[10], rarr[10];
+    char* leftNumber, * rightNumber, *nnStr, *nnnStr;
+    double lN, rN, result;
+    int leftPart, rightPart, countStartDel, countEndDel;
+    for (int n = 0; n < k; n++) {
+        int sizeToDel = 1;
+        for (int i = 0; i < strlen(nStr); i++) {
+            if (nStr[i] == '*') {
+                for (int j = i - 1; j >= 0; j--) {
+                    if (nStr[j] == '+' || nStr[j] == '*' || nStr[j] == '/' || nStr[j] == '-' || nStr[j] == '=') {
+                        leftNumber = new char[i - j];
+                        countStartDel = j + 1;
+                        for (int l = j + 1, m = 0; l < i; l++, m++) {
+                            leftNumber[m] = nStr[l];
+                        }
+                        leftNumber[i - j - 1] = '\0';
+                        cout << endl << leftNumber << "-----------" << endl;
+                        sizeToDel += strlen(leftNumber);
+                        cout << endl << sizeToDel << "-----------" << endl;
+                        lN = atof(leftNumber);
+                        
+                        delete[]leftNumber;
+                        cout << endl << lN << "left" << endl;
+                        break;
+                    }
+                }
+                for (int j = i + 1; j < strlen(nStr); j++) {
+                    if (nStr[j] == '+' || nStr[j] == '*' || nStr[j] == '/' || nStr[j] == '-' || nStr[j] == '=') {
+                        rightNumber = new char[j - i];
+                        countEndDel = j - 1;
+                        for (int l = i + 1, m = 0; l < j; l++, m++) {
+                            rightNumber[m] = nStr[l];
+                        }
+                        rightNumber[j - i - 1] = '\0';
+                        sizeToDel += strlen(rightNumber);
+                        cout << endl << sizeToDel << "-----------" << endl;
+                        rN = atof(rightNumber);
+                        
+                        delete[]rightNumber;
+                        cout << endl << rN << "right " << endl;
+                        break;
+                    }
+                }
+                result = lN * rN;
+                //cout << result << endl;
+                //result += 0.345;
+                leftPart = result;
+                rightPart = (result - leftPart) * 1000;
+                cout << leftPart << "." << rightPart << endl;
+                _itoa_s(leftPart, larr, 10);
+                _itoa_s(rightPart, rarr, 10);
+                cout << strlen(larr) << endl << strlen(rarr) << endl;
+                nnStr = new char[strlen(larr) + strlen(rarr) + 2];
+                for (int o = 0; o < strlen(larr); o++) {
+                    nnStr[o] = larr[o];
+                }
+                nnStr[strlen(larr)] = '.';
+                for (int o = strlen(larr) + 1; o < strlen(larr) + strlen(rarr) + 1; o++) {
+                    nnStr[o] = rarr[o - strlen(larr) - 1];
+                }
+                nnStr[strlen(larr) + strlen(rarr) + 1] = '\0';
+                cout << nnStr;
+                cout << endl << sizeToDel << "sadasdasdadasdsda";
+                nnnStr = new char[strlen(nStr) - sizeToDel + strlen(nnStr) + 1];
+                for (int j = 0; j < countStartDel; j++) {
+                    nnnStr[j] = nStr[j];
+                }
+                for (int j = countStartDel; j < strlen(nnStr) + countStartDel; j++) {
+                    nnnStr[j] = nnStr[j - countStartDel];
+                }
+                for (int j = countStartDel + strlen(nnStr); j < strlen(nnnStr); j++) {
+                    nnnStr[j] = nStr[j + countEndDel - countStartDel - strlen(nnStr) + 1];
+                }
 
+                cout << endl << nnnStr;
+                delete[]nStr;
+                nStr = nnnStr;
+                break;
+            }
         }
     }
+    
     return 0;
 }
 
@@ -188,17 +242,7 @@ int countCalc(char* str) { // Функция убирания скобок, в �
             }          
         }
     }
-
     return k;
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
