@@ -13,21 +13,23 @@ char* floatToString(double number);
 char* plusMinusCalcV2(char* str);
 int main()
 {
-    char* stroka = new char[100];
-    cin >> stroka;
-    char* nStroka = new char[strlen(stroka) + 1];
-    for (int i = 0; i < strlen(stroka); i++) {
-        nStroka[i] = stroka[i];
+    //setlocale(LC_ALL, "RUS");
+    while (true) {
+        char* stroka = new char[100];
+        //cout << "Введите математическое выражение: ";
+        cin >> stroka;
+        char* nStroka = new char[strlen(stroka) + 1];
+        for (int i = 0; i < strlen(stroka); i++) {
+            nStroka[i] = stroka[i];
+        }
+        nStroka[strlen(stroka)] = '\0';
+        delete[]stroka;
+
+        //cout << countCalc(nStroka) << endl;
+        //cout << multDivideCalc(countCalc(nStroka)) << endl;
+        cout << plusMinusCalcV2(multDivideCalc(countCalc(nStroka))) << endl;
+        cout << endl;
     }
-    nStroka[strlen(stroka)] = '\0';
-    delete[]stroka;
-
-    
-
-    cout << countCalc(nStroka) << endl;
-    cout << multDivideCalc(countCalc(nStroka)) << endl;
-    cout << plusMinusCalcV2(multDivideCalc(countCalc(nStroka))) << endl;
-
 }
 
 char& normalize(char* str) {
@@ -99,12 +101,52 @@ char& normalize(char* str) {
             }
         }
     }
+    int dCount = 0;
+    for (int i = 0; i < strlen(nStr); i++) {
+        if (nStr[i] == '+' && nStr[i + 1] == '-' || nStr[i] == '-' && nStr[i + 1] == '-') {
+            dCount++;
+        }
+    }
+    
+    for (int n = 0; n < dCount; n++) {
+        for (int i = 0; i < strlen(nStr); i++) {
+            if (nStr[i] == '+' && nStr[i + 1] == '-') {
+                char* nnStr = new char[strlen(nStr)];
+                for (int j = 0; j < i; j++) {
+                    nnStr[j] = nStr[j];
+                }
+                for (int j = i + 1; j < strlen(nStr); j++) {
+                    nnStr[j - 1] = nStr[j];
+                }
+                delete[]nStr;
+                nStr = nnStr;
+                break;
+            }
+            else if (nStr[i] == '-' && nStr[i + 1] == '-') {
+                char* nnStr = new char[strlen(nStr)];
+                for (int j = 0; j < i; j++) {
+                    nnStr[j] = nStr[j];
+                }
+                for (int j = i + 1; j < strlen(nStr); j++) {
+                    if (j == i + 1) {
+                        nnStr[j - 1] = '+';
+                    }
+                    else {
+                        nnStr[j - 1] = nStr[j];
+                    }
+                }
+                delete[]nStr;
+                nStr = nnStr;
+                break;
+            }
+        }  
+    }
     return *nStr;
 }
 
 char* floatToString(double number) {
     char larr[10], rarr[10];
-    int leftPart, rightPart;
+    long long leftPart, rightPart;
     char* nnStr;
     if (number < 0) {
         leftPart = number;
@@ -114,10 +156,8 @@ char* floatToString(double number) {
         leftPart = number;
         rightPart = (number - (float)leftPart) * 100.0;
     }
-    cout << endl << leftPart << endl << rightPart << endl;
     _itoa_s(leftPart, larr, 10);
     _itoa_s(rightPart, rarr, 10);
-    cout << endl << larr << endl << rarr << endl;
     nnStr = new char[strlen(larr) + strlen(rarr) + 2];
     for (int o = 0; o < strlen(larr); o++) {
         nnStr[o] = larr[o];
@@ -139,7 +179,6 @@ char* plusMinusCalcV2(char* str) {
             signCount++;
         }
     }
-    cout << nStr << endl << signCount << endl;
     // Проходим по строке и парсим данные уже в числовой массив
     double* strToNumber = new double[signCount];
     int k = 0;
@@ -154,8 +193,6 @@ char* plusMinusCalcV2(char* str) {
                         number[m++] = nStr[l];
                     }
                     number[j - i] = '\0';
-                    cout << endl << number << endl;
-                    cout << endl << atof(number) << endl;
                     strToNumber[k] = atof(number);
                     k++;
                     break;
@@ -163,16 +200,11 @@ char* plusMinusCalcV2(char* str) {
             }
         }
     }
-    for (int i = 0; i < signCount; i++) {
-        cout << strToNumber[i] << " ";
-    }
-    cout << endl;
     // Считаем сумму числового массива
     double summ = 0;
     for (int i = 0; i < signCount; i++) {
         summ += strToNumber[i];
     }
-    cout << endl << summ << endl;
     delete[]nStr;
     delete[]number;
     delete[]strToNumber;
@@ -182,10 +214,6 @@ char* plusMinusCalcV2(char* str) {
 
 char* multDivideCalc(char* str) {
     char* nStr = &normalize(str);  //приводим строку к удобному виду
-    /*for (int i = 0; i < strlen(nStr); i++) {
-        cout << nStr[i];
-    }*/
-
     int k = 0;
     for (int i = 0; i < strlen(nStr); i++) {            //считаем сколько в строке знаков "*" и "/"
         if (nStr[i] == '*' || nStr[i] == '/') {         //столько раз будем проходить циклом
@@ -195,15 +223,14 @@ char* multDivideCalc(char* str) {
     char larr[10], rarr[10];
     char* leftNumber, * rightNumber, *nnStr, *nnnStr;
     double lN, rN, result;
-    int leftPart, rightPart, countStartDel, countEndDel;
+    long long leftPart, rightPart;
+    int countStartDel, countEndDel;
     //идем по строке пока не встретим знак "*" и "/",
     //если встретили то идем от знака обратно пока не встретим хоть какой другой знак,
     //потом от знака идем вперед пока не встретим хоть какой знак
     //парсим эти числа и пишем их во флот
-    cout << endl << nStr << endl;
     for (int n = 0; n < k; n++) {
         int sizeToDel = 1;
-        cout << endl << strlen(nStr) << endl;
         for (int i = 0; i < strlen(nStr); i++) {
             if (nStr[i] == '*' || nStr[i] == '/') {
                 for (int j = i - 1; j >= 0; j--) {
@@ -215,15 +242,15 @@ char* multDivideCalc(char* str) {
                         }
                         leftNumber[i - j - 1] = '\0';
                         sizeToDel += strlen(leftNumber);
-                        cout << endl << leftNumber << endl;
                         lN = atof(leftNumber);
-                        cout << endl << lN << endl;
+                        //cout << endl << lN << endl;
                         delete[]leftNumber;
                         break;
                     }
                 }
                 for (int j = i + 1; j < strlen(nStr); j++) {
-                    if (nStr[j] == '+' || nStr[j] == '*' || nStr[j] == '/' || nStr[j] == '-' || nStr[j] == '=') {
+                   
+                    if (nStr[j] == '+' || nStr[j] == '*' || nStr[j] == '/' || nStr[j] == '-' && j != i + 1 || nStr[j] == '=') {
                         rightNumber = new char[j - i];
                         countEndDel = j - 1;
                         for (int l = i + 1, m = 0; l < j; l++, m++) {
@@ -231,9 +258,8 @@ char* multDivideCalc(char* str) {
                         }
                         rightNumber[j - i - 1] = '\0';
                         sizeToDel += strlen(rightNumber);
-                        cout << endl << rightNumber << endl;
                         rN = atof(rightNumber);
-                        cout << endl << rN << endl;
+                        //cout << endl << rN << endl;
                         delete[]rightNumber;
                         break;
                     }
@@ -241,38 +267,28 @@ char* multDivideCalc(char* str) {
                 //считаем умножение или деление
                 if (nStr[i] == '*') {
                     result = lN * rN;
-                    cout << endl << result << endl;
                 }
                 if (nStr[i] == '/') {
                     result = lN / rN;
-                    cout << endl << result << endl;
                 }
-                
                 //переносим флот обратно в чар
-
                 nnStr = floatToString(result);
-
-                cout << endl << nnStr << " - ftos" << endl;
                 //вписываем новую строку в старый массив при этом сразу меняя длину
                 nnnStr = new char[strlen(nStr) - sizeToDel + strlen(nnStr) + 1];
                 for (int j = 0; j < countStartDel; j++) {
                     nnnStr[j] = nStr[j];
                 }
-                cout << endl << nnnStr << endl;
                 for (int j = countStartDel; j < strlen(nnStr) + countStartDel; j++) {
                     nnnStr[j] = nnStr[j - countStartDel];
                 }
-                cout << endl << nnnStr << endl;
                 for (int j = countStartDel + strlen(nnStr); j < strlen(nnnStr); j++) {
                     nnnStr[j] = nStr[j + countEndDel - countStartDel - strlen(nnStr) + 1];
                 }
-                cout << endl << nnnStr << endl;
                 nnnStr[strlen(nStr) - sizeToDel + strlen(nnStr)] = '\0'; //добавил проверить
-                cout << endl << nnnStr << endl;
+                //cout << endl << nnnStr << endl;
                 delete[]nStr;
                 delete[]nnStr;
                 nStr = nnnStr;
-                cout << endl << nStr << endl;
                 break;
             }
         }
@@ -309,7 +325,6 @@ char* countCalc(char* str) { // Функция убирания скобок, в
                             nStr[m] = strn[l];
                         }
                         nStr[j - i - 1] = '\0';  
-                        cout << endl << nStr << endl;
                         char* nnStr = plusMinusCalcV2(multDivideCalc(nStr));                 
                         delete[]nStr;                      
                         char* nnnStr = new char[strlen(strn) - (j - i + 1) + strlen(nnStr)];
