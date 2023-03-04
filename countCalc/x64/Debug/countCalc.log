@@ -1,8 +1,12 @@
 ﻿  countCalc.cpp
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(147,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(164,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(176,28): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(177,49): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(187,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(200,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(116,16): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(117,35): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(126,5): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(165,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(179,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(193,28): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(194,49): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(202,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(214,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(266,25): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   countCalc.vcxproj -> C:\Users\L1nk\source\repos\countCalc\x64\Debug\countCalc.exe

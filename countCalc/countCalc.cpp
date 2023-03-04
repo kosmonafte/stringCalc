@@ -6,10 +6,10 @@
 #include <stdlib.h>
 
 using namespace std;
-int countCalc(char* str);
-int parseCalc(char* str);
+char* countCalc(char* str);
+char* multDivideCalc(char* str);
 char& normalize(char* str);
-double plusMinusCalcV2(char* str);
+char* plusMinusCalcV2(char* str);
 int main()
 {
     char* stroka = new char[100];
@@ -22,10 +22,8 @@ int main()
     delete[]stroka;
 
 
-
-    //cout << plusMinusCalcV2(nStroka);
-
-    parseCalc(nStroka);
+    
+    cout << plusMinusCalcV2(multDivideCalc(countCalc(nStroka)));
 
 }
 
@@ -72,7 +70,9 @@ char& normalize(char* str) {
     return *nStr;
 }
 
-double plusMinusCalcV2(char* str) {
+char* plusMinusCalcV2(char* str) {
+    char larr[10], rarr[10];
+    char* nnStr;
     char* nStr = &normalize(str);
     // Считаем сколько у нас знаков, а значит и элементов
     int signCount = 0;
@@ -111,30 +111,49 @@ double plusMinusCalcV2(char* str) {
     delete[]nStr;
     delete[]number;
     delete[]strToNumber;
-    return summ;
+
+    int leftPart, rightPart;
+    leftPart = summ;
+    rightPart = (summ - leftPart) * 1000;
+    //cout << leftPart << endl << rightPart << endl;
+    _itoa_s(leftPart, larr, 10);
+    _itoa_s(rightPart, rarr, 10);
+    nnStr = new char[strlen(larr) + strlen(rarr) + 2];
+    for (int o = 0; o < strlen(larr); o++) {
+        nnStr[o] = larr[o];
+    }
+    nnStr[strlen(larr)] = '.';
+    for (int o = strlen(larr) + 1; o < strlen(larr) + strlen(rarr) + 1; o++) {
+        nnStr[o] = rarr[o - strlen(larr) - 1];
+    }
+    nnStr[strlen(larr) + strlen(rarr) + 1] = '\0';
+    return nnStr;
 }
 
-int parseCalc(char* str) {
-    char* nStr = &normalize(str);
-    for (int i = 0; i < strlen(nStr); i++) {
+char* multDivideCalc(char* str) {
+    char* nStr = &normalize(str);  //приводим строку к удобному виду
+    /*for (int i = 0; i < strlen(nStr); i++) {
         cout << nStr[i];
-    }
+    }*/
     cout << endl;
     int k = 0;
-    for (int i = 0; i < strlen(nStr); i++) {
-        if (nStr[i] == '*' || nStr[i] == '/') {
+    for (int i = 0; i < strlen(nStr); i++) {            //считаем сколько в строке знаков "*" и "/"
+        if (nStr[i] == '*' || nStr[i] == '/') {         //столько раз будем проходить циклом
             k++;
         }
     }
-    cout << k << endl;
     char larr[10], rarr[10];
     char* leftNumber, * rightNumber, *nnStr, *nnnStr;
     double lN, rN, result;
     int leftPart, rightPart, countStartDel, countEndDel;
+    //идем по строке пока не встретим знак "*" и "/",
+    //если встретили то идем от знака обратно пока не встретим хоть какой другой знак,
+    //потом от знака идем вперед пока не встретим хоть какой знак
+    //парсим эти числа и пишем их во флот
     for (int n = 0; n < k; n++) {
         int sizeToDel = 1;
         for (int i = 0; i < strlen(nStr); i++) {
-            if (nStr[i] == '*') {
+            if (nStr[i] == '*' || nStr[i] == '/') {
                 for (int j = i - 1; j >= 0; j--) {
                     if (nStr[j] == '+' || nStr[j] == '*' || nStr[j] == '/' || nStr[j] == '-' || nStr[j] == '=') {
                         leftNumber = new char[i - j];
@@ -143,13 +162,9 @@ int parseCalc(char* str) {
                             leftNumber[m] = nStr[l];
                         }
                         leftNumber[i - j - 1] = '\0';
-                        cout << endl << leftNumber << "-----------" << endl;
                         sizeToDel += strlen(leftNumber);
-                        cout << endl << sizeToDel << "-----------" << endl;
                         lN = atof(leftNumber);
-                        
                         delete[]leftNumber;
-                        cout << endl << lN << "left" << endl;
                         break;
                     }
                 }
@@ -162,23 +177,23 @@ int parseCalc(char* str) {
                         }
                         rightNumber[j - i - 1] = '\0';
                         sizeToDel += strlen(rightNumber);
-                        cout << endl << sizeToDel << "-----------" << endl;
                         rN = atof(rightNumber);
-                        
                         delete[]rightNumber;
-                        cout << endl << rN << "right " << endl;
                         break;
                     }
                 }
-                result = lN * rN;
-                //cout << result << endl;
-                //result += 0.345;
+                //считаем умножение или деление
+                if (nStr[i] == '*') {
+                    result = lN * rN;
+                }
+                if (nStr[i] == '/') {
+                    result = lN / rN;
+                }
+                //переносим флот обратно в чар
                 leftPart = result;
                 rightPart = (result - leftPart) * 1000;
-                cout << leftPart << "." << rightPart << endl;
                 _itoa_s(leftPart, larr, 10);
                 _itoa_s(rightPart, rarr, 10);
-                cout << strlen(larr) << endl << strlen(rarr) << endl;
                 nnStr = new char[strlen(larr) + strlen(rarr) + 2];
                 for (int o = 0; o < strlen(larr); o++) {
                     nnStr[o] = larr[o];
@@ -188,8 +203,7 @@ int parseCalc(char* str) {
                     nnStr[o] = rarr[o - strlen(larr) - 1];
                 }
                 nnStr[strlen(larr) + strlen(rarr) + 1] = '\0';
-                cout << nnStr;
-                cout << endl << sizeToDel << "sadasdasdadasdsda";
+                //вписываем новую строку в старый массив при этом сразу меняя длину
                 nnnStr = new char[strlen(nStr) - sizeToDel + strlen(nnStr) + 1];
                 for (int j = 0; j < countStartDel; j++) {
                     nnnStr[j] = nStr[j];
@@ -200,19 +214,18 @@ int parseCalc(char* str) {
                 for (int j = countStartDel + strlen(nnStr); j < strlen(nnnStr); j++) {
                     nnnStr[j] = nStr[j + countEndDel - countStartDel - strlen(nnStr) + 1];
                 }
-
-                cout << endl << nnnStr;
+                nnnStr[strlen(nStr) - sizeToDel + strlen(nnStr)] = '\0'; //добавил проверить
                 delete[]nStr;
+                delete[]nnStr;
                 nStr = nnnStr;
                 break;
             }
         }
     }
-    
-    return 0;
+    return nStr;
 }
 
-int countCalc(char* str) { // Функция убирания скобок, в нее нужно передать функцию рассчета строки
+char* countCalc(char* str) { // Функция убирания скобок, в нее нужно передать функцию рассчета строки
     // Это счетчик чтобы понять сколько раз проходить по строке
     int k = 0;
     for (int i = 0; i < strlen(str); i++) {
@@ -220,29 +233,56 @@ int countCalc(char* str) { // Функция убирания скобок, в �
             k++;
         }
     }
+    if (k == 0) {
+        return str;
+    }
     // идем по строке и ищем открывающую скобу, если находим, то начинаем искать
     // закрывающую скобку, если находим то покачто просто печатаем то что между скобок,
     // если по пути попадается снова открывающая скобка то перекидываем индекс на нее
     // и снова идем дальше снова ищем закрывающуюу скобку.
     // Так проходиться нужно будет столько раз сколько у нас пар скобок
-    for (int i = 0; i < strlen(str); i++) {
-        if (str[i] == '(') {
-            for (int j = i + 1; j < strlen(str); j++) {
-                if (str[j] == ')') {
-                    for (int l = i + 1; l < j; l++) {
-                        cout << str[l] << " ";
+    char* strn = str;
+    for (int n = 0; n < k; n++) {
+        
+        int z = 0;
+        for (int i = 0; i < strlen(strn); i++) {
+            if (strn[i] == '(') {
+                for (int j = i + 1; j < strlen(strn); j++) {
+                    if (strn[j] == ')') {
+                        char* nStr = new char[j - i];
+                        for (int l = i + 1, m = 0; l < j; l++, m++) {
+                            nStr[m] = strn[l];
+                        }
+                        nStr[j - i - 1] = '\0';                      
+                        char* nnStr = plusMinusCalcV2(multDivideCalc(nStr));                 
+                        delete[]nStr;                      
+                        char* nnnStr = new char[strlen(strn) - (j - i + 1) + strlen(nnStr)];
+                        for (int p = 0; p < i; p++) {
+                            nnnStr[p] = strn[p];
+                        }                      
+                        for (int p = i, r = 0; p < i + strlen(nnStr); p++, r++) {
+                            nnnStr[p] = nnStr[r];
+                        }                      
+                        for (int p = i + strlen(nnStr), r = j + 1; p < strlen(nnnStr); p++, r++) {
+                            nnnStr[p] = strn[r];  
+                        }
+                        nnnStr[strlen(strn) - (j - i + 1) + strlen(nnStr)] = '\0';
+                        strn = nnnStr;
+                        z = 1;
+                        break;
                     }
-                    cout << endl;
-                    break;
+                    if (strn[j] == '(') {
+                        i = j - 1;
+                        break;
+                    }
                 }
-                if (str[j] == '(') {
-                    i = j - 1;
-                    break;
-                }
-            }          
+            }
+            if (z == 1) {
+                break;
+            }
         }
     }
-    return k;
+    return strn;
 }
 
 
