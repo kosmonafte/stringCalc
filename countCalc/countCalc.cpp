@@ -393,6 +393,7 @@ char* brackets(char* str) {
         nnnStr[left + strlen(nnStr) + j] = str[i];
     }
     nnnStr[strlen(str) - (right - left) + strlen(nnStr) - 1] = '\0';
+    delete[]nnStr;
     return brackets(nnnStr);
 }
 
