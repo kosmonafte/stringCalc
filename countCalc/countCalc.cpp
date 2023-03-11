@@ -150,7 +150,8 @@ char* floatToString(double number) {
     char* nnStr;
     if (number < 0) {
         leftPart = number;
-        rightPart = (-1) * (number - (float)leftPart) * 10;
+        rightTemp = (-1) * (number - leftPart) * 10;
+        rightPart = rightTemp;
     }
     else {
         leftPart = number;

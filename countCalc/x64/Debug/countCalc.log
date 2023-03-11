@@ -1,16 +1,17 @@
 ﻿  countCalc.cpp
 C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(152,20): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(153,55): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(156,20): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(157,41): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(158,21): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(167,5): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(245,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(260,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(283,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(227,25): warning C4101: rightPart: неиспользованная локальная переменная
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(224,10): warning C4101: larr: неиспользованная локальная переменная
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(227,15): warning C4101: leftPart: неиспользованная локальная переменная
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(224,20): warning C4101: rarr: неиспользованная локальная переменная
-C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(333,25): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(153,48): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(154,21): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(157,20): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(158,41): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(159,21): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(168,5): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(246,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(261,44): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(284,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(228,25): warning C4101: rightPart: неиспользованная локальная переменная
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(225,10): warning C4101: larr: неиспользованная локальная переменная
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(228,15): warning C4101: leftPart: неиспользованная локальная переменная
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(225,20): warning C4101: rarr: неиспользованная локальная переменная
+C:\Users\L1nk\source\repos\countCalc\countCalc\countCalc.cpp(334,25): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   countCalc.vcxproj -> C:\Users\L1nk\source\repos\countCalc\x64\Debug\countCalc.exe
