@@ -11,12 +11,11 @@ char* multDivideCalc(char* str);
 char& normalize(char* str);
 char* floatToString(double number);
 char* plusMinusCalcV2(char* str);
+char* brackets(char* str);
 int main()
 {
-    //setlocale(LC_ALL, "RUS");
     while (true) {
         char* stroka = new char[100];
-        //cout << "Введите математическое выражение: ";
         cin >> stroka;
         char* nStroka = new char[strlen(stroka) + 1];
         for (int i = 0; i < strlen(stroka); i++) {
@@ -25,9 +24,9 @@ int main()
         nStroka[strlen(stroka)] = '\0';
         delete[]stroka;
 
-        //cout << countCalc(nStroka) << endl;
-        //cout << multDivideCalc(countCalc(nStroka)) << endl;
-        cout << plusMinusCalcV2(multDivideCalc(countCalc(nStroka))) << endl;
+        //cout << plusMinusCalcV2(multDivideCalc(countCalc(nStroka))) << endl;
+
+        cout << plusMinusCalcV2(multDivideCalc(brackets(nStroka))) << endl;
         cout << endl;
     }
 }
@@ -312,37 +311,37 @@ char* countCalc(char* str) { // Функция убирания скобок, в
     // если по пути попадается снова открывающая скобка то перекидываем индекс на нее
     // и снова идем дальше снова ищем закрывающуюу скобку.
     // Так проходиться нужно будет столько раз сколько у нас пар скобок
-    char* strn = str;
-    for (int n = 0; n < k; n++) {
-        
+    for (int n = 0; n < k; n++) { 
         int z = 0;
-        for (int i = 0; i < strlen(strn); i++) {
-            if (strn[i] == '(') {
-                for (int j = i + 1; j < strlen(strn); j++) {
-                    if (strn[j] == ')') {
+        for (int i = 0; i < strlen(str); i++) {
+            if (str[i] == '(') {
+                for (int j = i + 1; j < strlen(str); j++) {
+                    if (str[j] == ')') {
                         char* nStr = new char[j - i];
                         for (int l = i + 1, m = 0; l < j; l++, m++) {
-                            nStr[m] = strn[l];
+                            nStr[m] = str[l];
                         }
                         nStr[j - i - 1] = '\0';  
                         char* nnStr = plusMinusCalcV2(multDivideCalc(nStr));                 
                         delete[]nStr;                      
-                        char* nnnStr = new char[strlen(strn) - (j - i + 1) + strlen(nnStr)];
+                        char* nnnStr = new char[strlen(str) - (j - i + 1) + strlen(nnStr)];
                         for (int p = 0; p < i; p++) {
-                            nnnStr[p] = strn[p];
+                            nnnStr[p] = str[p];
                         }                      
                         for (int p = i, r = 0; p < i + strlen(nnStr); p++, r++) {
                             nnnStr[p] = nnStr[r];
                         }                      
                         for (int p = i + strlen(nnStr), r = j + 1; p < strlen(nnnStr); p++, r++) {
-                            nnnStr[p] = strn[r];  
+                            nnnStr[p] = str[r];
                         }
-                        nnnStr[strlen(strn) - (j - i + 1) + strlen(nnStr)] = '\0';
-                        strn = nnnStr;
+                        nnnStr[strlen(str) - (j - i + 1) + strlen(nnStr)] = '\0';
+                        delete[]nnStr;
+                        //delete[]str;
+                        str = nnnStr;
                         z = 1;
                         break;
                     }
-                    if (strn[j] == '(') {
+                    if (str[j] == '(') {
                         i = j - 1;
                         break;
                     }
@@ -353,7 +352,47 @@ char* countCalc(char* str) { // Функция убирания скобок, в
             }
         }
     }
-    return strn;
+    return str;
 }
 
+char* brackets(char* str) {
+    int bracketsCount = 0;
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == '(') {
+            bracketsCount++;
+        }
+    }
+    if (bracketsCount == 0) {
+        return str;
+    }
+    int left, right;
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == '(') {
+            left = i;
+        }
+        if (str[i] == ')') {
+            right = i;
+            break;
+        }
+    }
+    char* nStr = new char[right - left];
+    for (int j = left + 1, m = 0; j < right; j++, m++) {
+        nStr[m] = str[j];
+    }
+    nStr[right - left - 1] = '\0';
+    char* nnStr = plusMinusCalcV2(multDivideCalc(nStr));
+    delete[]nStr;
+    char* nnnStr = new char[strlen(str) - (right - left) + strlen(nnStr)];
+    for (int i = 0; i < left; i++) {
+        nnnStr[i] = str[i];
+    }
+    for (int i = 0; i < strlen(nnStr); i++) {
+        nnnStr[left + i] = nnStr[i];
+    }
+    for (int i = right + 1, j = 0; i < strlen(str); i++, j++) {
+        nnnStr[left + strlen(nnStr) + j] = str[i];
+    }
+    nnnStr[strlen(str) - (right - left) + strlen(nnStr) - 1] = '\0';
+    return brackets(nnnStr);
+}
 
