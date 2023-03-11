@@ -145,15 +145,17 @@ char& normalize(char* str) {
 
 char* floatToString(double number) {
     char larr[10], rarr[10];
-    long long leftPart, rightPart;
+    float rightTemp;
+    int leftPart, rightPart;
     char* nnStr;
     if (number < 0) {
         leftPart = number;
-        rightPart = (-1) * (number - (float)leftPart) * 100.0;
+        rightPart = (-1) * (number - (float)leftPart) * 10;
     }
     else {
         leftPart = number;
-        rightPart = (number - (float)leftPart) * 100.0;
+        rightTemp = (number - leftPart) * 10;
+        rightPart = rightTemp;
     }
     _itoa_s(leftPart, larr, 10);
     _itoa_s(rightPart, rarr, 10);
@@ -242,7 +244,6 @@ char* multDivideCalc(char* str) {
                         leftNumber[i - j - 1] = '\0';
                         sizeToDel += strlen(leftNumber);
                         lN = atof(leftNumber);
-                        //cout << endl << lN << endl;
                         delete[]leftNumber;
                         break;
                     }
@@ -258,7 +259,6 @@ char* multDivideCalc(char* str) {
                         rightNumber[j - i - 1] = '\0';
                         sizeToDel += strlen(rightNumber);
                         rN = atof(rightNumber);
-                        //cout << endl << rN << endl;
                         delete[]rightNumber;
                         break;
                     }
@@ -283,8 +283,7 @@ char* multDivideCalc(char* str) {
                 for (int j = countStartDel + strlen(nnStr); j < strlen(nnnStr); j++) {
                     nnnStr[j] = nStr[j + countEndDel - countStartDel - strlen(nnStr) + 1];
                 }
-                nnnStr[strlen(nStr) - sizeToDel + strlen(nnStr)] = '\0'; //добавил проверить
-                //cout << endl << nnnStr << endl;
+                nnnStr[strlen(nStr) - sizeToDel + strlen(nnStr)] = '\0';
                 delete[]nStr;
                 delete[]nnStr;
                 nStr = nnnStr;
